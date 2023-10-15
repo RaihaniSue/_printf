@@ -14,8 +14,6 @@
 int _putchar(char c);
 int _strlen(char *s);
 #define NULL_STRING "(null)"
-/* main prototype */
-int _printf(const char *format, ...);
 /**
  * struct format_specifier - Format specifier structure.
  * @specifier: The format specifier string.
@@ -23,9 +21,12 @@ int _printf(const char *format, ...);
  */
 typedef struct format_specifier
 {
-	char *specifier;
-	int (*function)(va_list);
+        char *specifier;
+        int (*function)(va_list);
 } format_specifier_t;
+/* main prototype */
+int _printf(const char *format, ...);
+
 /* task zero */
 int print_char(va_list opaq);
 int print_string(va_list opaq);
