@@ -15,15 +15,16 @@ int _putchar(char c);
 int _strlen(char *s);
 #define NULL_STRING "(null)"
 /**
- * struct format_specifier - Format specifier structure.
- * @specifier: The format specifier string.
- * @function: The associated printing function.
- */
-typedef struct format_specifier
+  * struct code_format - Struct format
+  *
+  * @sc: The specifiers
+  * @f: The function associated
+  */
+typedef struct code_format
 {
-        char *specifier;
-        int (*function)(va_list);
-} format_specifier_t;
+	char *sc;
+	int (*f)(va_list);
+} code_f;
 /* main prototype */
 int _printf(const char *format, ...);
 
