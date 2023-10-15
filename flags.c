@@ -1,36 +1,34 @@
 #include "main.h"
 
 /**
- * flag_handler - Entry point
- * @f: flagging
- * @i:  parameter.
- * Return: spec_flag:
+ * get_flags - Calculates active flags
+ * @format: Formatted string in which to print the arguments
+ * @i: take a parameter.
+ * Return: Flags:
  */
-int flag_handler(const char *f, int *i)
+int get_flags(const char *format, int *i)
 {
-	int j, a;
-	int spec_flag = 0;
-	const char spec_flag_CH[] = {'-', '+', '0', '#', ' ', '\0'};
-	const int spec_flag_ARR[] = {F_MINUS, F_PLUS, F_ZERO, F_HASH, F_SPACE, 0};
+	/* - + 0 # ' ' */
+	/* 1 2 4 8  16 */
+	int j, curr_i;
+	int flags = 0;
+	const char FLAGS_CH[] = {'-', '+', '0', '#', ' ', '\0'};
+	const int FLAGS_ARR[] = {F_MINUS, F_PLUS, F_ZERO, F_HASH, F_SPACE, 0};
 
-	/*Check if the current char in the format str is a recognized flag*/
-	for (a = *i + 1; f[a] != '\0'; a++)
+	for (curr_i = *i + 1; format[curr_i] != '\0'; curr_i++)
 	{
-		for (j = 0; spec_flag_CH[j] != '\0'; j++)
-			if (f[a] == spec_flag_CH[j])
+		for (j = 0; FLAGS_CH[j] != '\0'; j++)
+			if (format[curr_i] == FLAGS_CH[j])
 			{
-				/*Set the corresponding flag bit*/
-				spec_flag |= spec_flag_ARR[j];
+				flags |= FLAGS_ARR[j];
 				break;
 			}
 
-		/*If the current char is not a recognized flag, exit the loop*/
-		if (spec_flag_CH[j] == 0)
+		if (FLAGS_CH[j] == 0)
 			break;
 	}
 
-	/*Update the position pointer to the last checked characte*/
-	*i = a - 1;
+	*i = curr_i - 1;
 
-	return (spec_flag);
+	return (flags);
 }

@@ -1,163 +1,160 @@
 #include "main.h"
 
+/************************* PRINT UNSIGNED NUMBER *************************/
 /**
- * print_unsigned_int - Entry point one
- * @opaq: List a of arguments
- * @b: array
- * @f:  flag
- * @w: width
- * @prec: precision
+ * print_unsigned - Prints an unsigned number
+ * @types: List a of arguments
+ * @buffer: Buffer array to handle print
+ * @flags:  Calculates active flags
+ * @width: get width
+ * @precision: Precision specification
  * @size: Size specifier
- * Return: printed chars
+ * Return: Number of chars printed.
  */
-int print_unsigned_int(va_list opaq, char b[],
-	int f, int w, int prec, int size)
+int print_unsigned(va_list types, char buffer[],
+	int flags, int width, int precision, int size)
 {
-	int x = BUFF_SIZE - 2;
-	unsigned long int number = va_arg(opaq, unsigned long int);
+	int i = BUFF_SIZE - 2;
+	unsigned long int num = va_arg(types, unsigned long int);
 
-	/*convert the number based on size*/
-	number = convert_size_unsgnd(number, size);
+	num = convert_size_unsgnd(num, size);
 
-	if (number == 0)
-		b[i--] = '0';
+	if (num == 0)
+		buffer[i--] = '0';
 
-	b[BUFF_SIZE - 1] = '\0';
+	buffer[BUFF_SIZE - 1] = '\0';
 
-	/*convert number to a string in reverse order*/
-	while (number > 0)
+	while (num > 0)
 	{
-		b[i--] = (number % 10) + '0';
-		number /= 10;
+		buffer[i--] = (num % 10) + '0';
+		num /= 10;
 	}
 
 	i++;
 
-	/*Call a function to write the result with flags, width, and precision*/
-	return (write_unsgnd(0, i, b, f, w, prec, size));
+	return (write_unsgnd(0, i, buffer, flags, width, precision, size));
 }
 
+/************* PRINT UNSIGNED NUMBER IN OCTAL  ****************/
 /**
- * print_octal - Entry point two
- * @opaq: arguments
- * @b: array
- * @f:  flag
- * @w: width
- * @prec: precision
+ * print_octal - Prints an unsigned number in octal notation
+ * @types: Lista of arguments
+ * @buffer: Buffer array to handle print
+ * @flags:  Calculates active flags
+ * @width: get width
+ * @precision: Precision specification
  * @size: Size specifier
- * Return: printed chars
+ * Return: Number of chars printed
  */
-int print_octal(va_list opaq, char b[],
-	int f, int w, int prec, int size)
+int print_octal(va_list types, char buffer[],
+	int flags, int width, int precision, int size)
 {
 
-	int x = BUFF_SIZE - 2;
-	unsigned long int number = va_arg(opaq, unsigned long int);
-	unsigned long int init_number = number;
+	int i = BUFF_SIZE - 2;
+	unsigned long int num = va_arg(types, unsigned long int);
+	unsigned long int init_num = num;
 
-	UNUSED(w);
+	UNUSED(width);
 
-	/*Convert the number based on the size specifier*/
-	number = convert_size_unsgnd(number, size);
+	num = convert_size_unsgnd(num, size);
 
-	if (number == 0)
-		b[i--] = '0';
+	if (num == 0)
+		buffer[i--] = '0';
 
-	b[BUFF_SIZE - 1] = '\0';
+	buffer[BUFF_SIZE - 1] = '\0';
 
-	/*Convert the number to an octal string in reverse order*/
-	while (number > 0)
+	while (num > 0)
 	{
-		b[i--] = (number % 8) + '0';
-		number /= 8;
+		buffer[i--] = (num % 8) + '0';
+		num /= 8;
 	}
 
-	/*Add '0' prefix if the '#' flag is set and the number is not zero*/
-	if (f & F_HASH && init_number != 0)
-		b[i--] = '0';
+	if (flags & F_HASH && init_num != 0)
+		buffer[i--] = '0';
 
 	i++;
 
-	return (write_unsgnd(0, i, b, f, w, prec, size));
+	return (write_unsgnd(0, i, buffer, flags, width, precision, size));
 }
 
+/************** PRINT UNSIGNED NUMBER IN HEXADECIMAL **************/
 /**
- * print_hexdecimal - entry point three
- * @opaq: args
- * @b: array
- * @f:  flag
- * @w: width
- * @prec: precision
+ * print_hexadecimal - Prints an unsigned number in hexadecimal notation
+ * @types: Lista of arguments
+ * @buffer: Buffer array to handle print
+ * @flags:  Calculates active flags
+ * @width: get width
+ * @precision: Precision specification
  * @size: Size specifier
- * Return: printed chars
+ * Return: Number of chars printed
  */
-int print_hexdecimal(va_list opaq, char b[],
-	int f, int w, int prec, int size)
+int print_hexadecimal(va_list types, char buffer[],
+	int flags, int width, int precision, int size)
 {
-	return (print_hex(opaq, "0123456789abcdef", b,
-		f, 'x', w, prec, size));
+	return (print_hexa(types, "0123456789abcdef", buffer,
+		flags, 'x', width, precision, size));
 }
 
+/************* PRINT UNSIGNED NUMBER IN UPPER HEXADECIMAL **************/
 /**
- * print_hex_upper - Prints an unsigned numberber in upper hexadecimal notation
- * @opaq: Lista of arguments
- * @b: b array to handle print
- * @f:  flag
- * @w: width
- * @prec: precision
+ * print_hexa_upper - Prints an unsigned number in upper hexadecimal notation
+ * @types: Lista of arguments
+ * @buffer: Buffer array to handle print
+ * @flags:  Calculates active flags
+ * @width: get width
+ * @precision: Precision specification
  * @size: Size specifier
- * Return: printed chars
+ * Return: Number of chars printed
  */
-int print_hex_upper(va_list opaq, char b[],
-	int f, int w, int prec, int size)
+int print_hexa_upper(va_list types, char buffer[],
+	int flags, int width, int precision, int size)
 {
-	return (print_hex(opaq, "0123456789ABCDEF", b,
-		f, 'X', w, prec, size));
+	return (print_hexa(types, "0123456789ABCDEF", buffer,
+		flags, 'X', width, precision, size));
 }
 
+/************** PRINT HEXX NUM IN LOWER OR UPPER **************/
 /**
- * print_hex - Prints a hexadecimal numberber in lower or upper
- * @opaq: Lista of arguments
- * @ar_map: Array of values to map the numberber to
- * @b: b array to handle print
- * @f:  flag
- * @act_f: flag
- * @w: width
- * @prec: precision
+ * print_hexa - Prints a hexadecimal number in lower or upper
+ * @types: Lista of arguments
+ * @map_to: Array of values to map the number to
+ * @buffer: Buffer array to handle print
+ * @flags:  Calculates active flags
+ * @flag_ch: Calculates active flags
+ * @width: get width
+ * @precision: Precision specification
  * @size: Size specifier
  * @size: Size specification
- * Return: printed chars
+ * Return: Number of chars printed
  */
-int print_hex(va_list opaq, char ar_map[], char b[],
-	int f, char act_f, int w, int prec, int size)
+int print_hexa(va_list types, char map_to[], char buffer[],
+	int flags, char flag_ch, int width, int precision, int size)
 {
-	int x = BUFF_SIZE - 2;
-	unsigned long int number = va_arg(opaq, unsigned long int);
-	unsigned long int init_number = number;
+	int i = BUFF_SIZE - 2;
+	unsigned long int num = va_arg(types, unsigned long int);
+	unsigned long int init_num = num;
 
-	UNUSED(w);
+	UNUSED(width);
 
-	number = convert_size_unsgnd(number, size);
+	num = convert_size_unsgnd(num, size);
 
-	if (number == 0)
-		b[i--] = '0';
+	if (num == 0)
+		buffer[i--] = '0';
 
-	b[BUFF_SIZE - 1] = '\0';
-	while (number > 0)
+	buffer[BUFF_SIZE - 1] = '\0';
+	while (num > 0)
 	{
-		b[i--] = ar_map[number % 16];
-		number /= 16;
+		buffer[i--] = map_to[num % 16];
+		num /= 16;
 	}
 
-	if (f & F_HASH && init_number != 0)
+	if (flags & F_HASH && init_num != 0)
 	{
-		b[i--] = act_f;
-		b[i--] = '0';
+		buffer[i--] = flag_ch;
+		buffer[i--] = '0';
 	}
 
 	i++;
 
-	return (write_unsgnd(0, i, b, f, w, prec, size));
+	return (write_unsgnd(0, i, buffer, flags, width, precision, size));
 }
-
-
