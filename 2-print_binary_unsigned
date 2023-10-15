@@ -1,0 +1,11 @@
+#include "main.h"
+
+/**
+ * print_binary_unsigned - Entry point
+ * @opaq : the parameters
+ *
+ * Return: 0 Always for success
+ */
+int print_binary_unsigned(va_list opaq)
+{
+
